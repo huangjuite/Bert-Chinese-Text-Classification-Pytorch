@@ -8,22 +8,24 @@ import argparse
 from utils import build_dataset, build_iterator, get_time_dif
 
 parser = argparse.ArgumentParser(description='Chinese Text Classification')
-parser.add_argument('--model', type=str, required=True, help='choose a model: Bert, ERNIE')
+parser.add_argument('--model', type=str, required=True, help='choose a model: bert, bert_RNN, ERNIE')
 args = parser.parse_args()
 
 
 if __name__ == '__main__':
-    dataset = 'THUCNews'  # 数据集
-    
+    # dataset = 'THUCNews'
+    dataset = 'dl_title_only'
+    # dataset = 'dl_with_key'
+
     torch.cuda.empty_cache()
     model_name = args.model  # bert
     x = import_module('models.' + model_name)
     config = x.Config(dataset)
     
-    np.random.seed(1)
-    torch.manual_seed(1)
-    torch.cuda.manual_seed_all(1)
-    torch.backends.cudnn.deterministic = True  # 保证每次结果一样
+    # np.random.seed(1)
+    # torch.manual_seed(1)
+    # torch.cuda.manual_seed_all(1)
+    # torch.backends.cudnn.deterministic = True 
 
     start_time = time.time()
     print("Loading data...")
