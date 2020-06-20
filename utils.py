@@ -8,7 +8,7 @@ PAD, CLS = '[PAD]', '[CLS]'  # padding符号, bert中综合信息符号
 
 
 def build_dataset(config):
-
+    
     def load_dataset(path, pad_size=32):
         contents = []
         with open(path, 'r', encoding='UTF-8') as f:
@@ -66,7 +66,7 @@ class DatasetIterater(object):
             batches = self._to_tensor(batches)
             return batches
 
-        elif self.index > self.n_batches:
+        elif self.index >= self.n_batches:
             self.index = 0
             raise StopIteration
         else:
