@@ -14,10 +14,12 @@ args = parser.parse_args()
 
 if __name__ == '__main__':
     dataset = 'THUCNews'  # 数据集
-
+    
+    torch.cuda.empty_cache()
     model_name = args.model  # bert
     x = import_module('models.' + model_name)
     config = x.Config(dataset)
+    
     np.random.seed(1)
     torch.manual_seed(1)
     torch.cuda.manual_seed_all(1)
