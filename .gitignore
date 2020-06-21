@@ -1,6 +1,6 @@
-vscode/
+.vscode/
 *.pyc
 __pycache__/
 *.bin
 *.ckpt
-acc*.csv
+*acc*.csv

@@ -29,7 +29,7 @@ def init_network(model, method='xavier', exclude='embedding', seed=123):
                 pass
 
 
-def train(config, model, train_iter, dev_iter, test_iter):
+def train(config, model, train_iter, test_iter):
     start_time = time.time()
     model.train()
     param_optimizer = list(model.named_parameters())
@@ -46,6 +46,7 @@ def train(config, model, train_iter, dev_iter, test_iter):
     total_batch = 0
     train_acc = 0
     best_acc = 0
+    loss = None
     model.train()
     for epoch in range(config.num_epochs):
         print('Epoch [{}/{}]'.format(epoch + 1, config.num_epochs))
@@ -59,7 +60,10 @@ def train(config, model, train_iter, dev_iter, test_iter):
                 true = labels.data.cpu()
                 predic = torch.max(outputs.data, 1)[1].cpu()
                 train_acc = metrics.accuracy_score(true, predic)
-                evaluate(config, model, dev_iter, train_acc)
+                predict = evaluate(config, model, test_iter)
+                result = pd.DataFrame(predict,columns=['label'])
+                result.to_csv(config.result_path+'/loss_%.4f_acc_%.4f.csv' % (loss.item(),train_acc), index_label='id')
+
                 if train_acc > best_acc:
                     best_acc = train_acc
                     torch.save(model.state_dict(), config.save_path)
@@ -71,12 +75,14 @@ def train(config, model, train_iter, dev_iter, test_iter):
                 model.train()
             total_batch += 1
 
-    evaluate(config, model, dev_iter, train_acc)
+    predict = evaluate(config, model, test_iter)
+    result = pd.DataFrame(predict,columns=['label'])
+    result.to_csv(config.result_path+'/loss_%.4f_acc_%.4f.csv' %
+                (loss.item(),train_acc), index_label='id')
 
 
 
-
-def evaluate(config, model, data_iter, train_acc):
+def evaluate(config, model, data_iter):
     model.eval()
     predict_all = np.array([], dtype=int)
     labels_all = np.array([], dtype=int)
@@ -88,7 +94,5 @@ def evaluate(config, model, data_iter, train_acc):
             labels_all = np.append(labels_all, labels)
             predict_all = np.append(predict_all, predic)
 
-    result = pd.DataFrame(np.array(predict_all),
-                          columns=['label'])
-    result.to_csv(config.result_path+'/acc_%.4f.csv' %
-                  train_acc, index_label='id')
+    return np.array(predict_all)
+    

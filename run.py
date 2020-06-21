@@ -31,11 +31,10 @@ if __name__ == '__main__':
     print("Loading data...")
     train_data, dev_data, test_data = build_dataset(config)
     train_iter = build_iterator(train_data, config)
-    dev_iter = build_iterator(dev_data, config)
     test_iter = build_iterator(test_data, config)
     time_dif = get_time_dif(start_time)
     print("Time usage:", time_dif)
 
     # train
     model = x.Model(config).to(config.device)
-    train(config, model, train_iter, dev_iter, test_iter)
+    train(config, model, train_iter, test_iter)
