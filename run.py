@@ -14,8 +14,8 @@ args = parser.parse_args()
 
 if __name__ == '__main__':
     # dataset = 'THUCNews'
-    dataset = 'dl_title_only'
-    # dataset = 'dl_with_key'
+    # dataset = 'dl_title_only'
+    dataset = 'dl_with_key'
 
     torch.cuda.empty_cache()
     model_name = args.model  # bert

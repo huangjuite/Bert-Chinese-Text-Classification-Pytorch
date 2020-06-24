@@ -62,7 +62,7 @@ def train(config, model, train_iter, test_iter):
                 train_acc = metrics.accuracy_score(true, predic)
                 predict = evaluate(config, model, test_iter)
                 result = pd.DataFrame(predict,columns=['label'])
-                result.to_csv(config.result_path+'/loss_%.4f_acc_%.4f.csv' % (loss.item(),train_acc), index_label='id')
+                result.to_csv(config.result_path+'/iter%05d_loss_%.4f_acc_%.4f.csv' % (total_batch,loss.item(),train_acc), index_label='id')
 
                 if train_acc > best_acc:
                     best_acc = train_acc
@@ -77,7 +77,7 @@ def train(config, model, train_iter, test_iter):
 
     predict = evaluate(config, model, test_iter)
     result = pd.DataFrame(predict,columns=['label'])
-    result.to_csv(config.result_path+'/loss_%.4f_acc_%.4f.csv' %
+    result.to_csv(config.result_path+'/final_loss_%.4f_acc_%.4f.csv' %
                 (loss.item(),train_acc), index_label='id')
 
 
